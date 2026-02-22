@@ -25,30 +25,24 @@ if uploaded_file is not None:
             loader = PyPDFLoader("temp.pdf")
             raw_pages = loader.load()
             
-            # Optimized chunk size for faster FAISS indexing
-            text_splitter = RecursiveCharacterTextSplitter(chunk_size=1200, chunk_overlap=100)
+            text_splitter = RecursiveCharacterTextSplitter(chunk_size=1500, chunk_overlap=150)
             pages = text_splitter.split_documents(raw_pages)
             
-            # 👉 FIX 1: Explicit model path for Embedding
-            embeddings = GoogleGenerativeAIEmbeddings(
-                model="models/embedding-001", 
-                task_type="retrieval_document"
-            )
+            try:
+                embeddings = GoogleGenerativeAIEmbeddings(model="models/text-embedding-004", task_type="retrieval_document")
+            except:
+                try:
+                    embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001", task_type="retrieval_document")
+                except:
+                    embeddings = GoogleGenerativeAIEmbeddings(model="embedding-001")
+
             vectorstore = FAISS.from_documents(documents=pages, embedding=embeddings)
             
-            # 👉 FIX 2: Explicit model path and stable v1 version for LLM
-            llm = ChatGoogleGenerativeAI(
-                model="models/gemini-1.5-flash", 
-                temperature=0.3,
-                version="v1"
-            )
+       
+            llm = ChatGoogleGenerativeAI(model="gemini-1.5-flash", temperature=0.3)
             
             prompt_template = """
-            You are a Senior AI Product Director. Evaluate based on:
-            1. [Business Value]: ROI/Efficiency.
-            2. [0 to 1 Execution]: Product leadership.
-            3. [Storytelling]: Technical translation.
-            
+            You are a Senior AI Product Director. Evaluate the following document based on Business ROI and Storytelling.
             Context: {context}
             User Question: {question}
             Your Evaluation:
@@ -71,5 +65,5 @@ if uploaded_file is not None:
                 st.write(response["result"])
                     
         except Exception as e:
-            st.error("⚠️ AI connection error. Check Developer Log below.")
+            st.error("⚠️ AI engine encountered an interface mismatch.")
             st.info(f"Developer Error Log: {e}")
