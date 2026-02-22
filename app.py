@@ -18,22 +18,17 @@ if uploaded_file is not None:
         
         if full_text.strip():
             model = genai.GenerativeModel('models/gemini-1.5-flash')
-            
             st.success("AI Director is ready to analyze.")
-            user_question = st.text_input("Ask a business question:")
             
+            user_question = st.text_input("Ask a business question:")
             if user_question:
-                with st.spinner("Analyzing..."):
+                with st.spinner("Analyzing via Stable V1 API..."):
                     prompt = f"Context:\n{full_text[:20000]}\n\nQuestion: {user_question}"
                     response = model.generate_content(prompt)
-                    
                     if response.text:
                         st.write("### 💼 Evaluation Report:")
                         st.write(response.text)
-                    else:
-                        st.warning("Empty response. Please check content safety.")
         else:
             st.warning("PDF appears empty.")
-            
     except Exception as e:
         st.error(f"Execution Error: {e}")
