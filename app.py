@@ -1,3 +1,4 @@
+st.write(st.secrets["GOOGLE_API_KEY"][:10])
 from google import genai
 import streamlit as st
 import os
