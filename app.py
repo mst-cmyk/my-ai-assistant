@@ -2,11 +2,7 @@ from google import genai
 import streamlit as st
 from PyPDF2 import PdfReader
 
-
-client = genai.Client(
-    api_key=st.secrets["GOOGLE_API_KEY"],
-    http_options={'api_version': 'v1'}
-)
+client = genai.Client(api_key=st.secrets["GOOGLE_API_KEY"])
 
 st.set_page_config(page_title="AI PM Assessor", page_icon="🎯")
 st.title("🎯 AI Business Value Assessor")
@@ -25,10 +21,9 @@ if uploaded_file:
             with st.spinner("Analyzing..."):
                 try:
                     response = client.models.generate_content(
-                    model="gemini-2.0-flash-exp",
-                    contents=f"Context from PDF:\n{full_text[:12000]}\n\nQuestion: {user_question}"
-                )
-            
+                        model="gemini-1.5-flash",
+                        contents=f"Context:\n{full_text[:15000]}\n\nQuestion: {user_question}"
+                    )
                     st.markdown("### 💼 Evaluation Report")
                     st.write(response.text)
                 except Exception as e:
