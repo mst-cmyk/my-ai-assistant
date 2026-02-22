@@ -1,37 +1,40 @@
+from google import genai
 import streamlit as st
-import google.generativeai as genai
 import os
 from PyPDF2 import PdfReader
 
-os.environ["GOOGLE_API_KEY"] = st.secrets["GOOGLE_API_KEY"]
-genai.configure(api_key=os.environ["GOOGLE_API_KEY"])
+client = genai.Client(api_key=st.secrets["GOOGLE_API_KEY"])
 
-st.set_page_config(page_title="AI PM Assessor", page_icon="💼")
 st.title("💼 AI Business Value Assessor")
 
 uploaded_file = st.file_uploader("Upload PDF", type="pdf")
 
-if uploaded_file is not None:
-    try:
-        reader = PdfReader(uploaded_file)
-        full_text = "".join([page.extract_text() for page in reader.pages])
-        
-        if full_text.strip():
-            model = genai.GenerativeModel('gemini-1.5-flash-latest')
-            
-            st.success("AI Director is ready to analyze.")
-            user_question = st.text_input("Ask a business question:")
-            
-            if user_question:
-                with st.spinner("Analyzing..."):
-                    prompt = f"Context:\n{full_text[:20000]}\n\nQuestion: {user_question}"
-                    response = model.generate_content(prompt)
-                    
-                    if response.text:
-                        st.write("### 💼 Evaluation Report:")
-                        st.write(response.text)
-        else:
-            st.warning("PDF appears empty.")
-            
-    except Exception as e:
-        st.error(f"Execution Error: {e}")
+if uploaded_file:
+    reader = PdfReader(uploaded_file)
+
+    full_text = ""
+    for page in reader.pages:
+        text = page.extract_text()
+        if text:
+            full_text += text
+
+    if full_text.strip():
+        st.success("AI Director is ready to analyze.")
+
+        user_question = st.text_input("Ask a question:")
+
+        if user_question:
+            with st.spinner("Thinking..."):
+                response = client.models.generate_content(
+                    model="gemini-1.5-flash",
+                    contents=f"""
+                    Context from PDF:
+                    {full_text[:20000]}
+
+                    Question:
+                    {user_question}
+                    """
+                )
+
+                st.write("### 💼 Evaluation Report:")
+                st.write(response.text)
