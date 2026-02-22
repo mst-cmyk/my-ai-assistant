@@ -1,4 +1,4 @@
-st.write(st.secrets["GOOGLE_API_KEY"][:10])
+
 from google import genai
 import streamlit as st
 import os
@@ -39,3 +39,12 @@ if uploaded_file:
 
                 st.write("### 💼 Evaluation Report:")
                 st.write(response.text)
+
+from google import genai
+
+client = genai.Client(api_key=st.secrets["GOOGLE_API_KEY"])
+
+models = client.models.list()
+
+for m in models:
+    st.write(m.name)
