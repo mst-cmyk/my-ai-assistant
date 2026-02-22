@@ -35,7 +35,7 @@ if uploaded_file is not None:
                 pages = text_splitter.split_documents(raw_pages)
                 
                 # 3. Create Vector Store
-                embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001")
+                embeddings = GoogleGenerativeAIEmbeddings(model="models/text-embedding-004")
                 vectorstore = FAISS.from_documents(documents=pages, embedding=embeddings)
                 
                 # 4. Setup LLM and Prompt
