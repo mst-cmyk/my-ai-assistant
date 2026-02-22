@@ -22,7 +22,7 @@ if uploaded_file:
                 try:
                     response = client.models.generate_content(
                         model="gemini-1.5-flash",
-                        contents=f"Context from PDF:\n{full_text[:15000]}\n\nQuestion: {user_question}"
+                        contents=f"Context:\n{full_text[:15000]}\n\nQuestion: {user_question}"
                     )
                     st.markdown("### 💼 Evaluation Report")
                     st.write(response.text)
