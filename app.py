@@ -39,7 +39,11 @@ if uploaded_file is not None:
                 vectorstore = FAISS.from_documents(documents=pages, embedding=embeddings)
                 
                 # 4. Setup LLM and Prompt
-                llm = ChatGoogleGenerativeAI(model="gemini-1.5-flash", temperature=0.3)
+                llm = ChatGoogleGenerativeAI(
+    model="gemini-1.5-flash", 
+    temperature=0.3,
+    version="v1"  
+)
                 
                 prompt_template = """
                 You are an extremely strict Senior AI Product Director. When evaluating this document, you do not care about basic coding syntax. You only focus on the following three core dimensions:
