@@ -9,7 +9,7 @@ from langchain.prompts import PromptTemplate
 # 1. Insert your API Key here (keep the quotes)
 os.environ["GOOGLE_API_KEY"] = st.secrets["GOOGLE_API_KEY"]
 
-st.set_page_config(page_title=import streamlit as st
+st.set_page_config(page_title="AI PM Resume Screener", page_icon="💼")
 import os
 from langchain_community.document_loaders import PyPDFLoader
 from langchain_community.vectorstores import FAISS
