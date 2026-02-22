@@ -24,9 +24,10 @@ if uploaded_file:
         if user_question:
             with st.spinner("Analyzing..."):
                 try:
-                    response = client.models.generate_content(
-                        model="models/gemini-1.5-flash",
-                        contents=f"Context from PDF:\n{full_text[:15000]}\n\nQuestion: {user_question}"
+                response = client.models.generate_content(
+                    model="gemini-2.0-flash-exp",
+                    contents=f"Context from PDF:\n{full_text[:12000]}\n\nQuestion: {user_question}"
+                )
                     )
                     st.markdown("### 💼 Evaluation Report")
                     st.write(response.text)
