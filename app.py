@@ -17,10 +17,11 @@ if uploaded_file is not None:
         full_text = "".join([page.extract_text() for page in reader.pages])
         
         if full_text.strip():
-            model = genai.GenerativeModel(
-                model_name='gemini-1.5-flash',
-                generation_config={"temperature": 0.3}
-            )
+          model = genai.GenerativeModel("gemini-1.5-flash-latest")
+response = model.generate_content(
+    prompt,
+    generation_config={"temperature": 0.3}
+)
             
             st.success("AI Director is ready to analyze.")
             user_question = st.text_input("Ask a question:")
