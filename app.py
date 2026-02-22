@@ -28,7 +28,7 @@ if uploaded_file:
                     model="gemini-2.0-flash-exp",
                     contents=f"Context from PDF:\n{full_text[:12000]}\n\nQuestion: {user_question}"
                 )
-                    )
+            
                     st.markdown("### 💼 Evaluation Report")
                     st.write(response.text)
                 except Exception as e:
