@@ -31,11 +31,9 @@ if uploaded_file is not None:
                 text_splitter = RecursiveCharacterTextSplitter(chunk_size=1500, chunk_overlap=150)
                 pages = text_splitter.split_documents(raw_pages)
                 
-                # 👉 修正 1：移除所有 model 前缀，让 SDK 自动映射
                 embeddings = GoogleGenerativeAIEmbeddings(model="embedding-001")
                 vectorstore = FAISS.from_documents(documents=pages, embedding=embeddings)
                 
-                # 👉 修正 2：使用最基础的定义，不强制指定 version，避开 404 坑
                 llm = ChatGoogleGenerativeAI(model="gemini-1.5-flash", temperature=0.3)
                 
                 prompt_template = """
