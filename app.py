@@ -24,7 +24,7 @@ if uploaded_file:
         if user_question:
             with st.spinner("Analyzing..."):
                 try:
-                response = client.models.generate_content(
+                    response = client.models.generate_content(
                     model="gemini-2.0-flash-exp",
                     contents=f"Context from PDF:\n{full_text[:12000]}\n\nQuestion: {user_question}"
                 )
