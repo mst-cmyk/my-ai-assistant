@@ -4,7 +4,10 @@ import streamlit as st
 import os
 from PyPDF2 import PdfReader
 
-client = genai.Client(api_key=st.secrets["GOOGLE_API_KEY"])
+client = genai.Client(
+    api_key=st.secrets["GOOGLE_API_KEY"],
+    http_options={'api_version': 'v1'}
+)
 
 st.title("💼 AI Business Value Assessor")
 
@@ -40,11 +43,3 @@ if uploaded_file:
                 st.write("### 💼 Evaluation Report:")
                 st.write(response.text)
 
-from google import genai
-
-client = genai.Client(api_key=st.secrets["GOOGLE_API_KEY"])
-
-models = client.models.list()
-
-for m in models:
-    st.write(m.name)
